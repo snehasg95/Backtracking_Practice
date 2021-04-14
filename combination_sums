@@ -1,0 +1,113 @@
+# Case 1 - Distinct numbers, unique combinations, resuse numbers allowed
+
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        
+        # pivot method
+        
+        if not candidates:
+            return []
+        
+        self.result = []
+        
+        self.helper(candidates, 0, [], target)
+        
+        return self.result
+    
+    
+    def helper(self, candidates, index, paths, target):
+        
+        # base
+        if target == 0:
+            self.result.append(paths.copy())
+            return
+            
+        if target < 0 or index== len(candidates):
+            return
+        
+        
+        # logic
+        
+        for i in range(index, len(candidates)): # example [1,2,3] target 4 - pivot is at 1 and explores combinations and then moves to 2, once at 2 1 is not included -- this way we get unique combinations
+          
+            paths.append(candidates[i])
+            # reuse allowed, so use i again
+            self.helper(candidates, i, paths, target - candidates[i])
+
+            paths.pop()
+            
+            
+# Case 2 - Duplicate numbers, unique combinations, resuse numbers NOT allowed
+
+def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        
+        if not candidates:
+            return []
+        
+        self.result = []
+        
+        candidates.sort()
+        
+        self.helper(candidates, 0, [], target)
+        
+        return self.result
+    
+    
+    def helper(self, candidates, index, paths, target):
+        
+        # base
+        if target == 0:
+            self.result.append(paths.copy())
+            return
+            
+        if target < 0 or index== len(candidates):
+            return
+        
+        
+        # logic
+        
+        for i in range(index, len(candidates)):
+            
+            if i > index and candidates[i] == candidates[i-1]:
+                continue
+                
+            paths.append(candidates[i])
+            # no reuse allowed, so select i+ 1
+            self.helper(candidates, i+1, paths, target - candidates[i])
+
+            paths.pop()
+
+        
+        
+ # Case 3 - Distinct numbers, reuse NOT allowed, combination of such k numbers
+ 
+ class Solution:
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        
+        self.result = []
+       
+        self.n = n
+        self.k = k
+        remainder = self.n
+        self.helper(remainder, [], 0)
+        return self.result
+        
+        
+    def helper(self,remainder, paths, index):
+        
+        #base case
+        if remainder == 0 and len(paths) == self.k:
+            self.result.append(paths.copy())
+            return
+        
+        elif remainder < 0 or len(paths) == self.k:
+            return
+        
+        
+        #logic
+        
+        for i in range(index, 9): # index is from 0 to 9, so choose i at +1 value ( no nums array, loop from 0 to 9 numbers
+        
+            paths.append(i+1)
+            self.helper(remainder-i-1, paths, i+1) # since i+1, remainder - i - 1
+            paths.pop()
